@@ -1,8 +1,4 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+@import url('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&display=swap');
 
 :root {
   --accent: #2337ff;
@@ -16,22 +12,33 @@
     0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
     0 16px 32px rgba(var(--gray), 33%);
 }
-@font-face {
-  font-family: 'Atkinson';
-  src: url('/fonts/atkinson-regular.woff') format('woff');
+
+/* Anek Bangla font classes with different weights */
+
+.anek-bangla-400 {
+  font-family: "Anek Bangla", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-variation-settings: "wdth" 100;
 }
-@font-face {
-  font-family: 'Atkinson';
-  src: url('/fonts/atkinson-bold.woff') format('woff');
+
+.anek-bangla-700 {
+  font-family: "Anek Bangla", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-variation-settings: "wdth" 100;
 }
+
+/* Use Anek Bangla as the default body font */
+
 body {
-  font-family: 'Atkinson', sans-serif;
+  font-family: "Anek Bangla", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
   margin: 0;
   padding: 0;
   text-align: left;
@@ -43,6 +50,7 @@ body {
   font-size: 20px;
   line-height: 1.7;
 }
+
 main {
   width: 720px;
   max-width: calc(100% - 2em);
