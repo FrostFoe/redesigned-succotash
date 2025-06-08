@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>🖤 BW MDX Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Scrollbar for output */
+      #mdxOutput::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      #mdxOutput::-webkit-scrollbar-thumb {
+        background: #aaa;
+        border-radius: 10px;
+      }
+      #mdxOutput::-webkit-scrollbar-track {
+        background: #111;
+      }
+      /* Toolbar button base style */
+      .toolbar-btn {
+        cursor: pointer;
+        user-select: none;
+        font-weight: 600;
+        border-radius: 9999px;
+        padding: 0.5rem 1.25rem;
+        transition: all 0.25s ease;
+        background-color: #111;
+        color: #eee;
+        border: 1.5px solid #555;
+        box-shadow: none;
+        user-select: none;
+        will-change: transform;
+      }
+      .toolbar-btn:hover {
+        background-color: #eee;
+        color: #111;
+        border-color: #000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgb(0 0 0 / 0.4);
+      }
+      /* Selection color */
+      ::selection {
+        background-color: #000;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-black min-h-screen flex flex-col items-center py-12 px-6 font-sans text-white selection:bg-black selection:text-white"
+  >
+    <h1 class="text-4xl font-extrabold mb-12 select-none tracking-tight">
+      🖤 Black & White MDX Editor
+    </h1>
+
+    <form
+      class="w-full max-w-5xl bg-black/95 rounded-3xl border border-gray-700 p-10 space-y-10"
+      onsubmit="return false"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <label
+            for="title"
+            class="block text-xs font-semibold mb-2 uppercase text-gray-400 select-none"
+            >Title</label
+          >
+          <input
+            id="title"
+            type="text"
+            placeholder="Your post title"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl py-3 px-5 text-lg font-semibold placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition"
+            autocomplete="off"
+          />
+        </div>
+
+        <div>
+          <label
+            for="description"
+            class="block text-xs font-semibold mb-2 uppercase text-gray-400 select-none"
+            >Description</label
+          >
+          <textarea
+            id="description"
+            rows="2"
+            placeholder="Brief description"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl py-3 px-5 placeholder-gray-500 resize-y focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition"
+          ></textarea>
+        </div>
+
+        <div>
+          <label
+            for="pubDate"
+            class="block text-xs font-semibold mb-2 uppercase text-gray-400 select-none"
+            >Publication Date</label
+          >
+          <input
+            id="pubDate"
+            type="text"
+            placeholder="e.g., Jun 19 2024"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl py-3 px-5 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition"
+            autocomplete="off"
+          />
+        </div>
+
+        <div>
+          <label
+            for="heroImage"
+            class="block text-xs font-semibold mb-2 uppercase text-gray-400 select-none"
+            >Hero Image Path</label
+          >
+          <input
+            id="heroImage"
+            type="text"
+            placeholder="e.g., ../../assets/hero.jpg"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl py-3 px-5 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div
+        class="flex flex-wrap gap-3 bg-gray-900 border border-gray-700 rounded-3xl p-5"
+        aria-label="Markdown Toolbar"
+      >
+        <button
+          type="button"
+          data-action="heading"
+          data-level="1"
+          class="toolbar-btn"
+        >
+          H1
+        </button>
+        <button
+          type="button"
+          data-action="heading"
+          data-level="2"
+          class="toolbar-btn"
+        >
+          H2
+        </button>
+        <button
+          type="button"
+          data-action="heading"
+          data-level="3"
+          class="toolbar-btn"
+        >
+          H3
+        </button>
+        <button type="button" data-action="bold" class="toolbar-btn">
+          Bold
+        </button>
+        <button type="button" data-action="italic" class="toolbar-btn">
+          Italic
+        </button>
+        <button type="button" data-action="bolditalic" class="toolbar-btn">
+          BoldItalic
+        </button>
+        <button type="button" data-action="blockquote" class="toolbar-btn">
+          Blockquote
+        </button>
+        <button type="button" data-action="olist" class="toolbar-btn">
+          Ordered List
+        </button>
+        <button type="button" data-action="ulist" class="toolbar-btn">
+          Unordered List
+        </button>
+        <button type="button" data-action="codeblock" class="toolbar-btn">
+          Code Block
+        </button>
+        <button type="button" data-action="inlinecode" class="toolbar-btn">
+          Inline Code
+        </button>
+        <button type="button" data-action="link" class="toolbar-btn">
+          Link
+        </button>
+        <button type="button" data-action="image" class="toolbar-btn">
+          Image
+        </button>
+        <button type="button" data-action="hr" class="toolbar-btn">HR</button>
+        <button type="button" data-action="table" class="toolbar-btn">
+          Table
+        </button>
+      </div>
+
+      <div>
+        <label
+          for="content"
+          class="block text-xs font-semibold mb-3 uppercase text-gray-400 select-none"
+        >
+          Write your MDX content here
+        </label>
+        <textarea
+          id="content"
+          rows="20"
+          placeholder="Start typing your markdown/MDX content..."
+          class="w-full bg-gray-900 border border-gray-700 rounded-3xl p-6 font-mono placeholder-gray-500 resize-y focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+          spellcheck="false"
+        ></textarea>
+      </div>
+    </form>
+
+    <section
+      class="w-full max-w-5xl mt-16 bg-gray-900 rounded-3xl border border-gray-700 p-8"
+      aria-label="Generated MDX code output"
+    >
+      <h2 class="text-2xl font-bold mb-6 select-none">Generated MDX Code</h2>
+      <textarea
+        id="mdxOutput"
+        readonly
+        rows="24"
+        class="w-full bg-black text-white rounded-3xl p-6 font-mono resize-y border border-gray-600"
+        spellcheck="false"
+      ></textarea>
+    </section>
+
+    <script>
+      const titleInput = document.getElementById('title');
+      const descInput = document.getElementById('description');
+      const pubDateInput = document.getElementById('pubDate');
+      const heroImageInput = document.getElementById('heroImage');
+      const contentInput = document.getElementById('content');
+      const mdxOutput = document.getElementById('mdxOutput');
+      const toolbarButtons = document.querySelectorAll('.toolbar-btn');
+
+      function escapeFrontmatterString(str) {
+        return str.replace(/'/g, "\\'");
+      }
+
+      function generateFrontmatter() {
+        return `---
+title: '${escapeFrontmatterString(titleInput.value.trim()) || 'Your Title Here'}'
+description: '${escapeFrontmatterString(descInput.value.trim()) || 'Description here'}'
+pubDate: '${pubDateInput.value.trim() || 'Jun 19 2024'}'
+heroImage: '${heroImageInput.value.trim() || '../../assets/blog-placeholder-1.jpg'}'
+---
+
+`;
+      }
+
+      function generateMDX() {
+        const frontmatter = generateFrontmatter();
+        const content = contentInput.value || '';
+        return frontmatter + content;
+      }
+
+      function updateMDX() {
+        mdxOutput.value = generateMDX();
+      }
+
+      function wrapSelection(textarea, wrapper) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.slice(start, end);
+        const newText = wrapper + selectedText + wrapper;
+        textarea.setRangeText(newText, start, end, 'end');
+        textarea.selectionStart = start + wrapper.length;
+        textarea.selectionEnd = end + wrapper.length;
+        textarea.focus();
+        updateMDX();
+      }
+
+      function prependLineStart(textarea, insertText) {
+        const start = textarea.selectionStart;
+        const value = textarea.value;
+        const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+        textarea.setRangeText(insertText, lineStart, lineStart, 'end');
+        textarea.selectionStart = start + insertText.length;
+        textarea.selectionEnd = textarea.selectionStart;
+        textarea.focus();
+        updateMDX();
+      }
+
+      function prependNumberedList(textarea) {
+        const start = textarea.selectionStart;
+        const value = textarea.value;
+        const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+        const lineEnd = value.indexOf('\n', start);
+        const lineText =
+          lineEnd === -1
+            ? value.slice(lineStart)
+            : value.slice(lineStart, lineEnd);
+
+        if (/^\d+\.\s/.test(lineText)) return;
+        prependLineStart(textarea, '1. ');
+      }
+
+      function insertAtCursor(textarea, text) {
+        const start = textarea.selectionStart;
+        textarea.setRangeText(text, start, start, 'end');
+        textarea.selectionStart = textarea.selectionEnd = start + text.length;
+        textarea.focus();
+        updateMDX();
+      }
+
+      toolbarButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const action = btn.getAttribute('data-action');
+          switch (action) {
+            case 'heading':
+              const level = btn.getAttribute('data-level') || 1;
+              prependLineStart(contentInput, '#'.repeat(level) + ' ');
+              break;
+            case 'bold':
+              wrapSelection(contentInput, '**');
+              break;
+            case 'italic':
+              wrapSelection(contentInput, '_');
+              break;
+            case 'bolditalic':
+              wrapSelection(contentInput, '***');
+              break;
+            case 'blockquote':
+              prependLineStart(contentInput, '> ');
+              break;
+            case 'olist':
+              prependNumberedList(contentInput);
+              break;
+            case 'ulist':
+              prependLineStart(contentInput, '- ');
+              break;
+            case 'codeblock':
+              let lang = prompt('Enter the code language (optional):', '');
+              if (lang === null) break;
+              const codeBlock = `\n\`\`\`${lang}\n\n\`\`\`\n`;
+              insertAtCursor(contentInput, codeBlock);
+              break;
+            case 'inlinecode':
+              wrapSelection(contentInput, '`');
+              break;
+            case 'link':
+              const url = prompt('Enter the URL:', 'https://');
+              if (!url) break;
+              const text = prompt('Enter the link text:', 'Link text');
+              if (text === null) break;
+              insertAtCursor(contentInput, `[${text}](${url})`);
+              break;
+            case 'image':
+              const imgUrl = prompt('Enter the image URL:', 'https://');
+              if (!imgUrl) break;
+              const altText = prompt(
+                'Enter alt text for the image:',
+                'Image description'
+              );
+              if (altText === null) break;
+              insertAtCursor(contentInput, `![${altText}](${imgUrl})`);
+              break;
+            case 'hr':
+              insertAtCursor(contentInput, `\n---\n`);
+              break;
+            case 'table':
+              const cols = prompt('How many columns?', '3');
+              if (!cols || isNaN(cols) || cols < 1) break;
+              const colCount = Number(cols);
+              const headers = Array(colCount).fill('Header').join(' | ');
+              const separators = Array(colCount).fill('---').join(' | ');
+              const row = Array(colCount).fill('Data').join(' | ');
+              const tableMD = `\n| ${headers} |\n| ${separators} |\n| ${row} |\n`;
+              insertAtCursor(contentInput, tableMD);
+              break;
+          }
+        });
+      });
+
+      [
+        titleInput,
+        descInput,
+        pubDateInput,
+        heroImageInput,
+        contentInput,
+      ].forEach((el) => el.addEventListener('input', updateMDX));
+
+      updateMDX();
+    </script>
+  </body>
+</html>
